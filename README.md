@@ -1,9 +1,10 @@
 # small-term-weixiang
 基于情感分析的智能养老系统
-##安装教程
+##
+安装教程
 1.python安装flask框架
 2.linux搭建tensorflow
-###计算机视觉
+计算机视觉
 古名扬，何文龙
 ####任务
 第一周周报：
