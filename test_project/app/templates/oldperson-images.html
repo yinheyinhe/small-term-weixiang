@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>老人看护系统-老年人头像列表页面</title>
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/style-default.css">
+    <link rel="stylesheet" href="/static/css/style-starter.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+<body>
+<div class="x-body">
+    <div class="contact-top pt-5">
+        <div class="row cont-main-top">
+            <div class="table table-striped text-center">
+                {% for movie in movies %}
+                    <a onclick="x_admin_show('录入图片信息','/oldperson/getImage/{{ movie.id }}',750,520)"
+                       style="color: black" title="点击录入图片">
+                        <ul style="float: left; margin-top: 15px">
+                            <li id="img_li">
+                                <img src="{{ movie.profile_photo }}"
+                                     width="250" height="360" alt="image"/>
+                            </li>
+                            <li style="margin-top: 10px">
+                                <h4>{{ movie.username }}</h4>
+                            </li>
+                        </ul>
+                    </a>
+                {% endfor %}
+            </div>
+            <div style="text-align: center; width: 100%">
+                <ul class="pagination" style="text-align: center">
+                    {{ html | safe }}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

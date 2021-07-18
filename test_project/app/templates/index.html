@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎使用-老人看护系统</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script src="/static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+<body>
+<!-- 顶部开始 -->
+<div class="container">
+    <div class="logo"><a href="/index/{{ username }}">老人看护系统</a></div>
+    <div class="left_open">
+        <i title="展开左侧栏" class="iconfont">&#xe699;</i>
+    </div>
+    <ul class="layui-nav right" lay-filter="">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                {{ username }}
+            </a>
+            <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                <dd><a href="javascript:;" data-method="changePass" data-type="auto">修改密码</a></dd>
+                <dd><a href="javascript:;" data-method="loginOut" data-type="auto">退出</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+</div>
+<!-- 顶部结束 -->
+<!-- 中部开始 -->
+<!-- 左侧菜单开始 -->
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe726;</i>
+                    <cite>系统设置模块</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="/member_list">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>系统用户信息</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe723;</i>
+                    <cite>老年人信息管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="/oldperson_list">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>老年人信息</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a _href="/oldperson/imagelist">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>老年人头像列表信息</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a _href="/oldperson_charts">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>老年人信息统计分析</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe6b8;</i>
+                    <cite>工作人员信息管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="/employee_list">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>工作人员信息</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="/employee/imagelist">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>工作人员头像列表信息</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="/employee_charts">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>工作人员信息统计分析</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li><li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe6f4;</i>
+                    <cite>义工信息管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="/volunteer_list">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>义工信息</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="/volunteer/imagelist">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>义工头像列表信息</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="/volunteer_charts">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>义工信息统计分析</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- <div class="x-slide_left"></div> -->
+<!-- 左侧菜单结束 -->
+<!-- 右侧主体开始 -->
+<div class="page-content">
+    <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+        <ul class="layui-tab-title">
+            <li>系统用户信息</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe src='/member_list' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-content-bg"></div>
+<!-- 右侧主体结束 -->
+<!-- 中部结束 -->
+</body>
+<script>
+    layui.use(['layer', 'form'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery
+            , layer = layui.layer
+            , form = layui.form; //独立版的layer无需执行这一句
+
+        form.verify({
+            pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+        });
+
+        $(document).ready(function () {
+            changePassSuccess = '{{ change_pass_success }}'
+            if (changePassSuccess !== 'True' && changePassSuccess !== '') {
+                layer.open({
+                    type: 1
+                    , id: 'layerDemo1'
+                    , content: '<div style="padding: 20px 100px;">原密码输入错误，修改密码失败！</div>'
+                    , btn: '关闭'
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0 //不显示遮罩
+                    , yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        })
+
+        //触发事件
+        var active = {
+            changePass: function (othis) {
+                //示范一个公告层
+                layer.open({
+                    type: 1,
+                    title: false, //不显示标题栏
+                    closeBtn: false,
+                    area: '300px;',
+                    shade: 0.5,
+                    id: 'LAY_layuipro_pass', //设定一个id，防止重复弹出
+                    btn: ['提交', '取消'],
+                    btnAlign: 'c',
+                    moveType: 1, //拖拽模式，0或者1
+                    content: '' +
+                        '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">' +
+                        '<form class="layui-form">' +
+                        '    <div class="layui-form-item">' +
+                        '      <label class="layui-form-label">原密码</label>' +
+                        '      <div class="layui-input-inline">' +
+                        '        <input type="password" name="oldPass" lay-verify="required" id="oldPass" placeholder="请输入6-12原密码" autocomplete="off" class="layui-input">' +
+                        '      </div>' +
+                        '    </div>' +
+                        '    <div class="layui-form-item">' +
+                        '      <label class="layui-form-label">新密码</label>' +
+                        '      <div class="layui-input-inline">' +
+                        '        <input type="password" name="newPass" lay-verify="required|pass" id="newPass" placeholder="请输入6-12新密码" autocomplete="off" class="layui-input">' +
+                        '      </div>' +
+                        '    </div>' +
+                        '</form>' +
+                        '</div>',
+                    yes: function (layero) {
+                        window.location.href = '/change_pass?oldPass=' + $('#oldPass').val() + '&newPass=' + $('#newPass').val() + '&username={{ username }}'
+                    }
+                });
+            },
+            loginOut: function (othis) {
+                //示范一个公告层
+                layer.open({
+                    type: 1,
+                    title: false, //不显示标题栏
+                    closeBtn: false,
+                    area: '300px;',
+                    shade: 0.8,
+                    id: 'LAY_layuipro', //设定一个id，防止重复弹出
+                    btn: ['确认', '取消'],
+                    btnAlign: 'c',
+                    moveType: 1, //拖拽模式，0或者1
+                    content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">是否退出登录？</div>',
+                    success: function (layero) {
+                        var btn = layero.find('.layui-layer-btn');
+                        btn.find('.layui-layer-btn0').attr({
+                            href: '/'
+                        });
+                    }
+                });
+            }
+        };
+
+        $('.layui-nav-child a').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+    })
+</script>
+</html>

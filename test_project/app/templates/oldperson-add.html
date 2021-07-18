@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>老人看护系统-老年人添加页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="L_username" class="layui-form-label">
+                <span class="x-red">*</span>姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_username" name="username" required="" lay-verify="nikename"
+                       autocomplete="off" class="layui-input" placeholder="请输入姓名">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                至少2个字符
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_pass" class="layui-form-label">
+                <span class="x-red">*</span>手机号码
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="phoneNum" required="" lay-verify="phone|required"
+                       autocomplete="off" class="layui-input" placeholder="请输入手机号码">
+            </div>
+            <label class="layui-form-label">
+                <span class="x-red">*</span>身份证号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="id_card" required="" lay-verify="identity"
+                       autocomplete="off" class="layui-input" placeholder="请输入身份证号">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="birthday" id="birthday" lay-verify="date" placeholder="yyyy-MM-dd"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+            <label class="layui-form-label">房间号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="room_number" placeholder="请输入房间号" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">监护人一姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="firstguardian_name" placeholder="请输入第一监护人姓名" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <label class="layui-form-label">监护人一关系</label>
+            <div class="layui-input-inline">
+                <input type="text" name="firstguardian_relationship" placeholder="请输入第一监护人关系" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">监护人一电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="firstguardian_phone" lay-verify="phone" placeholder="请输入第一监护人电话"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">监护人二姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="secondguardian_name" placeholder="请输入第二监护人姓名" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">监护人二关系</label>
+            <div class="layui-input-inline">
+                <input type="text" name="secondguardian_relationship" placeholder="请输入第二监护人关系" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <label class="layui-form-label">监护人二电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="secondguardian_phone" lay-verify="phone" placeholder="请输入第二监护人电话"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <input type="radio" name="sex" value="男" title="男" checked="">
+                    <input type="radio" name="sex" value="女" title="女">
+                </div>
+                <label class="layui-form-label">健康状况</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="health_state" value="良好" title="良好" checked="">
+                    <input type="radio" name="health_state" value="健康" title="健康">
+                    <input type="radio" name="health_state" value="虚弱" title="虚弱">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn layui-btn-radius layui-btn-normal" lay-filter="add" lay-submit="">
+                增加
+            </button>
+            <button type="reset" class="layui-btn layui-btn-radius layui-btn-primary">重置</button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.config({
+        base: '/static/layui/'
+    }).extend({
+        test: 'selectPlus'
+    }).use(['selectPlus', 'jquery', 'table', 'form', 'laydate'], function () {
+        var $ = layui.$,
+            selectPlus = layui.selectPlus,
+            laydate = layui.laydate,
+            form = layui.form;
+
+        //自定义验证规则
+        form.verify({
+            nikename: function (value) {
+                if (value.length < 2) {
+                    return '用户名至少2个字符';
+                }
+            }
+        });
+
+        //日期
+        laydate.render({
+            elem: '#birthday'
+        });
+
+        //监听提交
+        form.on('submit(add)', function (data) {
+            var formData = data.field;
+            console.debug(formData);
+            var username = formData.username,
+                phoneNum = formData.phoneNum,
+                id_card = formData.id_card,
+                birthday = formData.birthday,
+                room_number = formData.room_number,
+                firstguardian_name = formData.firstguardian_name,
+                firstguardian_relationship = formData.firstguardian_relationship,
+                firstguardian_phone = formData.firstguardian_phone,
+                secondguardian_name = formData.secondguardian_name,
+                secondguardian_relationship = formData.secondguardian_relationship,
+                secondguardian_phone = formData.secondguardian_phone,
+                sex = formData.sex,
+                health_state = formData.health_state
+            layer.alert('您确认要增加此用户信息？', {
+                skin: 'layui-layer-molv' //样式类名layui-layer-lan或layui-layer-molv  自定义样式
+                , closeBtn: 1    // 是否显示关闭按钮
+                , anim: 1 //动画类型
+                , btn: ['确定', '取消'] //按钮
+                , icon: 2    // icon
+                , yes: function () {
+                    //发送请求到后台
+                    $.post("/oldperson/save",
+                        {
+                            username: username,
+                            phone: phoneNum,
+                            id_card: id_card,
+                            birthday: birthday,
+                            room_number: room_number,
+                            firstguardian_name: firstguardian_name,
+                            firstguardian_relationship: firstguardian_relationship,
+                            firstguardian_phone: firstguardian_phone,
+                            secondguardian_name: secondguardian_name,
+                            secondguardian_relationship: secondguardian_relationship,
+                            secondguardian_phone: secondguardian_phone,
+                            sex: sex,
+                            health_state: health_state
+                        }, function (result) {
+                            if (result.success === true) {//增加成功，刷新当前页表格
+                                layer.alert("增加成功", {icon: 6}, function () {
+                                    // 获得frame索引
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    //关闭当前frame
+                                    parent.layer.close(index);
+                                    window.parent.location.reload();//增加成功后刷新父界面
+                                });
+                            } else if (result.success === false) {  //增加失败
+                                layer.alert(result.msg, {icon: 2});
+                            }
+                        });
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

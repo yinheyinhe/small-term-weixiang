@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>老人看护系统-义工信息统计分析页面</title>
+    <script src="/static/js/echarts.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+</head>
+<body>
+<div class="x-body">
+    <div class="layui-row">
+        <div class="layui-col-xs6">
+            <div id="main" style="width: 100%;height:400px;"></div>
+        </div>
+        <div class="layui-col-xs6">
+            <div id="main2" style="width: 100%;height:400px;"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //main1
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '离/入职对比图'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
+            data: ['离职人数', '入园人数']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '离职人数',
+                type: 'line',
+                stack: '总量',
+                areaStyle: {normal: {}},
+                data: {{ main1_list[0] }}
+            },
+            {
+                name: '入园人数',
+                type: 'line',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                areaStyle: {normal: {}},
+                data: {{ main1_list[1] }}
+            }
+        ]
+    };
+    myChart.setOption(option);
+</script>
+
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main2'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '访问人员分布统计'
+        },
+        tooltip: {},
+        legend: {
+            data: ['时间']
+        },
+        xAxis: {
+            data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+        },
+        yAxis: {},
+        series: [{
+            name: '人数',
+            type: 'bar',
+            data: {{ main2_list }}
+        }]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+
+</div>
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+</div>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+</script>
+
+</body>
+</html>

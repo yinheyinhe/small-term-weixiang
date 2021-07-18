@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>老人看护系统-用户信息查看页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+
+<body>
+<div class="x-body">
+    <form class="layui-form" lay-filter="edit_form">
+        <input type="hidden" name="id" value="{{ user_id }}" readonly/>
+        <div class="layui-form-item">
+            <label for="L_username" class="layui-form-label">
+                <span class="x-red">*</span>用户名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_username" name="username" required="" lay-verify="nikename"
+                       autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_phoneNum" class="layui-form-label">
+                电话号码
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_phoneNum" name="phoneNum" lay-verify="phone"
+                       autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                邮箱
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="email" lay-verify="email"
+                       autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="sex" value="男" title="男" checked="" disabled>
+                <input type="radio" name="sex" value="女" title="女" disabled>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function () {
+        var $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
+
+        $.post("/user/findById", {id: '{{ user_id }}'}, function (result) {
+            if (result != null) {//查询成功，给form赋值
+                form.val("edit_form", {
+                    id: result.id,
+                    username: result.username,
+                    phoneNum: result.phone,
+                    email: result.email,
+                    sex: result.sex
+                });
+            } else {  //查询失败
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                layer.alert("查询失败", {icon: 2});
+            }
+        });
+    });
+</script>
+</body>
+</html>

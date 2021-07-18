@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录-老人看护系统</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script src="/static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+<body class="login-bg">
+
+<div class="login">
+    <div class="message">老人看护系统-登录</div>
+    <div id="darkbannerwrap"></div>
+
+    <form method="post" class="layui-form" action="/login">
+        <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
+        <hr class="hr15">
+        <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+        <hr class="hr15">
+        <input value="登录" style="width:100%;" type="submit">
+        <hr class="hr15">
+        <input value="注册" style="width:100%; background-color: deepskyblue" type="button" onclick="register()">
+        <hr class="hr10">
+        {% if login_fail: %}
+            <span style="color: red;">帐号或密码错误，请重新输入！</span>
+        {% endif %}
+        {% if register_success: %}
+            <span style="color: red;">帐号注册成功！</span>
+        {% endif %}
+        {% if login_no: %}
+            <span style="color: red;">请先进行登录！</span>
+        {% endif %}
+        {% if change_pass_success: %}
+            <span style="color: red;">密码修改成功，请重新登录！</span>
+        {% endif %}
+    </form>
+</div>
+<script type="text/javascript">
+    function register() {
+        window.location.href = '/register';
+    }
+</script>
+</body>
+</html>

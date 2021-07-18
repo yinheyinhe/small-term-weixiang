@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>老人看护系统-义工信息页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+<body>
+<div class="x-body">
+    <div class="layui-row" style="text-align: center">
+        <form class="layui-form layui-form-pane user-select-table">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input type="text" name="username" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="phoneNum" placeholder="请输入电话号码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline" style="text-align: left" id="status_select" lay-filter="status_select"></div>
+                <div class="layui-inline" style="text-align: left" id="gender_select" lay-filter="gender_select"></div>
+                <button class="layui-btn layui-inline" lay-submit lay-filter="search">
+                    <i class="layui-icon">&#xe615;</i>
+                </button>
+                <a class="layui-btn layui-inline" href="javascript:location.replace(location.href);" title="刷新">
+                    <i class="layui-icon">&#xe669;</i>
+                </a>
+            </div>
+        </form>
+    </div>
+    <table class="layui-hide" id="user_table" lay-filter="user_table"></table>
+</div>
+<script type="text/html" id="users_toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delAll"><i class="layui-icon"></i>批量删除
+        </button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm"
+                onclick="x_admin_show('添加义工','/volunteer_add',750,320)"><i class="layui-icon"></i>添加
+        </button>
+    </div>
+</script>
+<script type="text/html" id="form_bar">
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="statusChange" title="访问中">
+        <i class="layui-icon">&#xe601;</i>
+    </a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail" title="查看">
+        <i class="layui-icon">&#xe63c;</i>
+    </a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" title="编辑">
+        <i class="layui-icon">&#xe642;</i>
+    </a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" title="删除">
+        <i class="layui-icon">&#xe640;</i>
+    </a>
+</script>
+<script>
+    layui.config({
+        base: '/static/layui/'
+    }).extend({
+        test: 'selectPlus'
+    }).use(['selectPlus', 'jquery', 'table', 'form'], function () {
+        var $ = layui.$,
+            selectPlus = layui.selectPlus,
+            table = layui.table,
+            form = layui.form
+
+        // 单选
+        var gender_select = selectPlus.render({
+            el: '#gender_select',
+            data: [{
+                "name": "男,女",
+                "id": "0,1",
+                "text": "男 --- 女"
+            }, {
+                "name": "男",
+                "id": "0",
+                "text": "男"
+            }, {
+                "name": "女",
+                "id": "1",
+                "text": "女"
+            }],
+            type: "radio",
+            valueName: "text",
+            values: '男 --- 女'
+        });
+
+        //方法级渲染
+        table.render({
+            elem: '#user_table'
+            , url: '/volunteer/findByQuery'
+            , id: 'userReload'
+            , toolbar: '#users_toolbar' //自定义工具栏
+            , page: true
+            , cols: [[
+                {checkbox: true, fixed: true}
+                , {field: 'id', title: 'ID', width: 80, sort: true, fixed: true}
+                , {field: 'name', align: 'center', title: '姓名', sort: true}
+                , {field: 'gender', align: 'center', title: '性别'}
+                , {field: 'phone', align: 'center', title: '电话号码'}
+                , {field: 'checkin_date', align: 'center', title: '访问日期'}
+                , {field: 'birthday', align: 'center', title: '出生日期'}
+                , {field: 'id_card', align: 'center', title: '身份证号'}
+                , {field: 'created', align: 'center', title: '创建时间'}
+                , {field: 'updated', align: 'center', title: '修改时间'}
+                , {
+                    field: 'isactive', title: '义工状态', width: 120, align: 'center', templet: function (data) {
+                        if (data.isactive === '0') {
+                            return "<span class='layui-btn layui-btn-disabled layui-btn-sm'>已离开</span>";
+                        } else {
+                            return "<span class='layui-btn layui-btn-normal layui-btn-sm'>访问中</span>";
+                        }
+                    }
+                }
+                , {fixed: 'right', width: 200, align: 'center', toolbar: '#form_bar'}
+            ]]
+        });
+
+        form.on('submit(search)', function (data) {
+            var formData = data.field;
+            console.debug(formData);
+            var statusCheck = gender_select.getChecked();
+            var username = formData.username,
+                phoneNum = formData.phoneNum,
+                status = statusCheck.data[0].name;
+            if (username === "" && phoneNum === "" && status === "") {
+                layer.msg('请输入筛选条件！', {icon: 2, time: 1500});
+                return false;
+            }
+            if (username !== "") {
+                username = "%" + username + "%"
+            }
+            if (phoneNum !== "") {
+                phoneNum = "%" + phoneNum + "%"
+            }
+
+            //数据表格重载
+            table.reload('userReload', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: {//这里传参  向后台
+                    username: username,
+                    phoneNum: phoneNum,
+                    status: status
+                }
+            });
+            return false;//false：阻止表单跳转  true：表单跳转
+        });
+
+        //监听头工具栏事件
+        table.on('toolbar(user_table)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id)
+            var data = checkStatus.data; //获取选中的数据
+            //json字符串转换成Json数据 eval("("+jsonStr+")")  /JSON.parse(jsonStr)
+            data = eval("(" + JSON.stringify(data) + ")");
+            switch (obj.event) {
+                case 'delAll':
+                    if (data.length === 0) {
+                        layer.msg('请至少选择1行', {icon: 2, time: 1500});
+                    } else {
+                        layer.alert('您确认要删除' + data.length + '条数据吗？', {
+                            skin: 'layui-layer-molv' //样式类名layui-layer-lan或layui-layer-molv  自定义样式
+                            , closeBtn: 1    // 是否显示关闭按钮
+                            , anim: 1 //动画类型
+                            , btn: ['确定', '取消'] //按钮
+                            , icon: 2    // icon
+                            , yes: function () {
+                                // layer.msg('确定', { icon: 1, time: 1500 });
+                                ids = []
+                                for (var i = 0; i < data.length; i++) {
+                                    console.debug("id:======" + data[i].id)
+                                    ids.push(data[i].id)
+                                }
+                                //发送请求到后台
+                                $.post("/volunteer/delete", {ids: ids.join(",")}, function (result) {
+                                    if (result.success === true) {//删除成功，刷新当前页表格
+                                        // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                        layer.alert(result.msg, {icon: 1}, function () {
+                                            window.location.reload();
+                                        });
+                                    } else if (result.success === false) {  //删除失败
+                                        layer.alert(result.msg, {icon: 2});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    break;
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(user_table)', function (obj) { //注：tool 是工具条事件名，parts_table 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            switch (layEvent) {
+                case 'statusChange':
+                    var status = data.isactive === '0' ? '1' : '0';
+                    layer.confirm('您确定更改id：' + data.id + '的账户状态吗？', function (index) {
+                        //向服务端发送删除指令，在这里可以使用Ajax异步
+                        $.post("/volunteer/updateStatus", {id: data.id, status: status}, function (ret) {
+                            if (ret.success === true) {//修改状态成功，刷新当前页表格
+                                layer.alert(ret.msg, {icon: 1}, function () {
+                                    window.location.reload();
+                                });
+                            } else if (ret.success === false) {  //修改状态失败
+                                layer.alert(ret.msg, {icon: 2});
+                            }
+                        });
+                    });
+                    break;
+                case 'detail':
+                    x_admin_show('查看老年人', '/volunteer_detail?id=' + data.id, 750, 270);
+                    break;
+                case 'del':
+                    layer.confirm('您确定删除id：' + data.id + '的老年人数据吗？', function (index) {
+                        //向服务端发送删除指令，在这里可以使用Ajax异步
+                        $.post("/volunteer/delete", {ids: data.id}, function (ret) {
+                            if (ret.success === true) {//删除成功，刷新当前页表格
+                                layer.alert(ret.msg, {icon: 1}, function () {
+                                    window.location.reload();
+                                });
+                            } else if (ret.success === false) {  //删除失败
+                                layer.alert(ret.msg, {icon: 2});
+                            }
+                        });
+                    });
+                    break;
+                /**
+                 * 弹出编辑表格
+                 */
+                case 'edit':
+                    console.debug(data);
+                    x_admin_show('修改老年人', '/volunteer_edit?id=' + data.id, 750, 320);
+                    break;
+            }
+        });
+    })
+</script>
+</body>
+</html>

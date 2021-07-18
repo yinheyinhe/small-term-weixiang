@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>老人看护系统-老年人头像选择页面</title>
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/style-default.css">
+    <link rel="stylesheet" href="/static/css/style-starter.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+<body>
+<div class="contact-top pt-5">
+    <div class="row cont-main-top">
+        <div class="table table-striped text-center">
+            {% for image in image_filenames %}
+                <a href="javascript:;" data-method="loginOut" data-type="{{ image }}" style="color: black"
+                   title="点击选择图片为头像">
+                    <ul style="float: left; margin-top: 15px">
+                        <li id="img_li" style="width: 150px">
+                            <img src="{{ image }}"
+                                 width="150" height="160" alt="image"/>
+                        </li>
+                    </ul>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery
+            , layer = layui.layer
+            , form = layui.form; //独立版的layer无需执行这一句
+
+        //触发事件
+        var active = {
+            loginOut: function (othis) {
+                var photo = othis.data('type');
+                //示范一个公告层
+                layer.open({
+                    type: 1,
+                    title: false, //不显示标题栏
+                    closeBtn: false,
+                    area: '300px;',
+                    shade: 0.4,
+                    id: 'LAY_layuipro_ws', //设定一个id，防止重复弹出
+                    btn: ['确认', '取消'],
+                    btnAlign: 'c',
+                    moveType: 1, //拖拽模式，0或者1
+                    content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">是否确认选择这张图片？</div>',
+                    yes: function (layero) {
+                        window.location.href = '/oldperson/setProfileImage/{{ oldperson_id }}?photo=' + photo
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                        window.parent.location.reload();//增加成功后刷新父界面
+                    }
+                });
+            }
+        };
+
+        $('.table a').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+    })
+</script>
+</body>
+</html>
